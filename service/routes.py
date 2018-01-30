@@ -1,18 +1,19 @@
-from .views import chat, index
 
 
 def setup_routes(
     app,
+    router,
 ):
     app.router.add_route(
         'GET',
         '/',
-        index,
-        name='views:index',
+        router.index.index,
+        name='index',
     ),
+
     app.router.add_route(
         'GET',
         '/chat',
-        chat,
-        name='views:chat',
+        router.chat.chat,
+        name='chat',
     )
