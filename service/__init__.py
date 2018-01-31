@@ -48,7 +48,6 @@ class Server(
     def run(self):
 
         self.setup()
-
         http_server = self.loop.create_server(
             self.handler,
             self.host,
