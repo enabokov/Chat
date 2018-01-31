@@ -4,16 +4,25 @@ from jinja2 import Environment, FileSystemLoader
 from .settings import TEMPLATES_ROOT, STATIC_ROOT, JINJA2_ENVIRONMENT
 from .middlewares import TemplateMiddleware
 from service.handlers import Router
+import asyncio
+import logging
 
 
 class Server(
     TemplateMiddleware,
 ):
-
+    host = '0.0.0.0'
+    port = 80
     router = None
+    http_server = None
+    loop = asyncio.get_event_loop()
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    handler = None
 
     def __init__(self):
-        self.app = web.Application()
+        self.app = web.Application(loop=self.loop)
+        logging.info('App initialized')
 
     def setup(self):
         jinja2_env = Environment(
@@ -34,8 +43,36 @@ class Server(
 
         self.app.middlewares.append(self.middleware)
 
+        self.handler = self.app.make_handler(loop=self.loop)
+
     def run(self):
 
         self.setup()
 
-        web.run_app(self.app, host='127.0.0.1', port=7777)
+        http_server = self.loop.create_server(
+            self.handler,
+            self.host,
+            self.port,
+        )
+
+        self.http_server = self.loop.run_until_complete(http_server)
+
+        try:
+            logging.info('App was started. Running on %(host)s:%(port)s', {'host': self.host, 'port': self.port})
+            self.loop.run_forever()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            logging.info('HTTP Server is closing')
+            self.http_server.close()
+            logging.info('HTTP Server is closed')
+            self.loop.run_until_complete(self.http_server.wait_closed())
+
+            self.loop.run_until_complete(self.app.shutdown())
+            logging.info('App was shutdown')
+            self.loop.run_until_complete(self.handler.shutdown())
+            logging.info('Handler is shutting down')
+
+            self.loop.run_until_complete(self.app.cleanup())
+            self.loop.close()
+            logging.info('App was finished')
