@@ -3,17 +3,18 @@ from aiohttp import web
 from misc.handlers import TemplateHandler
 
 
-class TemplateMiddleware:
+class TemplateMiddleware(
+    TemplateHandler,
+):
 
     encoding = 'utf-8'
-    handler = TemplateHandler()
 
     @web.middleware
     async def middleware(self, request, handler):
         try:
             return await handler(request)
         except web.HTTPUnauthorized as exc:
-            return self.handler.render_template(
+            return self.render_template(
                 template_name='errors/Unauthorized.html',
                 request=request,
                 context={'error': exc.reason},
@@ -21,7 +22,7 @@ class TemplateMiddleware:
             )
 
         except web.HTTPNotFound as exc:
-            return self.handler.render_template(
+            return self.render_template(
                 template_name='errors/NotFound.html',
                 request=request,
                 context={'error': exc.reason},
@@ -29,7 +30,7 @@ class TemplateMiddleware:
             )
 
         except web.HTTPBadRequest as exc:
-            return self.handler.render_template(
+            return self.render_template(
                 template_name='errors/BadRequest.html',
                 request=request,
                 context={'error': exc.reason},

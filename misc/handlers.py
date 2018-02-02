@@ -1,5 +1,6 @@
 from aiohttp import web
-from service.settings import JINJA2_ENVIRONMENT, JINJA2_CONTEXT
+
+from service.settings import JINJA2_CONTEXT, JINJA2_ENVIRONMENT
 
 
 class TemplateHandler:

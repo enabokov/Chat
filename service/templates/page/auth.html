@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block body %}
+    {% if errors is not none %}
+    <h1>{{ errors }}</h1>
+    {% endif %}
+
+    <div class="container" id="signup-form">
+        <div class="row">
+             <div class="col-sm-4 col-sm-offset-4">
+                <form class="form-horizontal"
+                      action="{% if signup %} {{ url('page:signup_post') }}
+                      {% else %} {{ url('page:login_post') }} {% endif %}"
+                      method="POST">
+
+                    <div class="form-group">
+                        <label class="control-label" for="name">Name:</label>
+                        <div>
+                            <input name="name" type="text"
+                                   class="form-control" id="name" placeholder="Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="password">Password:</label>
+                        <div>
+                            <input name="password" type="password"
+                                   class="form-control" id="password" placeholder="Password">
+                        </div>
+                    </div>
+
+                    {% if signup %}
+                        <div class="form-group">
+                            <label class="control-label" for="confirm_password">Confirm password:</label>
+                            <div>
+                                <input name="confirm_password" type="password" class="form-control"
+                                       id="confirm_password" placeholder="Confirm password">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <button type="submit" class="btn btn-success">{% if signup %} Sign up {% else %} Login {% endif %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

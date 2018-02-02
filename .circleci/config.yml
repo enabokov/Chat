@@ -1,0 +1,18 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: circleci/python:3.6.2
+
+        working_directory: ~/app
+
+        steps:
+            - checkout
+
+            - run:
+                name: install-dependecies
+                command: sudo pip install -r requirements.txt
+
+            - run:
+                name: lint
+                command: make lint
