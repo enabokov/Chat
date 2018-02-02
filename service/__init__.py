@@ -72,16 +72,18 @@ class Server(
         except KeyboardInterrupt:
             pass
         finally:
-            logging.info('Aioreloader is closing')
             self.reloader.cancel()
+            logging.info('Aioreloader is closing')
 
-            logging.info('HTTP Server is closing')
             self.http_server.close()
-            logging.info('HTTP Server is closed')
+            logging.info('HTTP Server is closing')
+
             self.loop.run_until_complete(self.http_server.wait_closed())
+            logging.info('HTTP Server is closed')
 
             self.loop.run_until_complete(self.app.shutdown())
             logging.info('App was shutdown')
+
             self.loop.run_until_complete(self.handler.shutdown())
             logging.info('Handler is shutting down')
 
