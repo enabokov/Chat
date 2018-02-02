@@ -5,20 +5,21 @@ class BaseHandler:
 
 class Router:
 
-    index = chat = None
+    auth = None
+    chat = None
 
     def __init__(self):
         self.handlers = set()
         self.routers = set()
 
     def setup_index_handlers(self):
-        from .index import Handler
+        from .auth import Handler
 
         handler = Handler()
 
         self.handlers.add(handler)
 
-        self.index = handler
+        self.auth = handler
 
         return handler
 

@@ -1,13 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-</head>
-<body>
-    <h1>Well done, you are on the index page</h1>
-    <p>Here will be some info about chat and registration form of course</p>
+{% extends "base.html" %}
 
-    <h2>I will use react for this probably</h2>
-</body>
-</html>
+{% block body %}
+    <h1>Welcome to the first chat!</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Did u already signed up for this chat?</h4>
+                <a href="{{ url('page:login_get') }}" class="btn btn-success">Login</a>
+            </div>
+             <div class="col-md-4">
+                <h4>Or u wish to sign up?</h4>
+                <a href="{{ url('page:signup_get') }}" class="btn btn-success">Sign up</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
