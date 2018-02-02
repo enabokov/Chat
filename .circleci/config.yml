@@ -1,0 +1,29 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: circleci/python:3.6.2
+
+        working_directory: ~/app
+
+        steps:
+            - checkout
+
+            - restore_cache:
+                keys:
+                - v1-dependencies-{{ checksum "requirements.txt" }}
+
+            - run:
+                name: lint
+                command: make lint
+
+            - run:
+                name: service |
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+
+            - save_cache:
+                paths:
+                    - ./venv
+                key: v1-dependencies-{{ checksum "requirements.txt" }}
