@@ -13,11 +13,8 @@ import aioreloader
 class Server(
     TemplateMiddleware,
 ):
-    remote_host = '0.0.0.0'
-    remote_port = 80
-
-    host = '127.0.0.1'
-    port = 7777
+    host = '0.0.0.0'
+    port = 9999
 
     router = None
     http_server = None
