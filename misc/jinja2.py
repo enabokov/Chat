@@ -1,4 +1,5 @@
 from functools import partial
+
 from service.settings import STATIC_ROOT
 
 

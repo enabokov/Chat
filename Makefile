@@ -3,6 +3,5 @@ run-chat-server:
 
 lint:
 	flake8
-	isort --check-only -rc service --diff
-	isort --check-only -rc configs --diff
+	isort --check-only -rc . --diff
 

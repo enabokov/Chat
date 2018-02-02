@@ -1,13 +1,16 @@
-from aiohttp import web
-from .routes import setup_routes
-from jinja2 import Environment, FileSystemLoader
-from .settings import TEMPLATES_ROOT, STATIC_ROOT, APP_ROOT, JINJA2_ENVIRONMENT
-from .middlewares import TemplateMiddleware
-from service.handlers import Router
 import asyncio
-from misc.jinja2 import setup_jinja2
 import logging
+
 import aioreloader
+from aiohttp import web
+from jinja2 import Environment, FileSystemLoader
+
+from misc.jinja2 import setup_jinja2
+from service.handlers import Router
+
+from .middlewares import TemplateMiddleware
+from .routes import setup_routes
+from .settings import APP_ROOT, JINJA2_ENVIRONMENT, STATIC_ROOT, TEMPLATES_ROOT
 
 
 class Server(
