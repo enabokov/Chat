@@ -1,0 +1,2 @@
+CREATE USER edward WITH PASSWORD 'edward';
+CREATE DATABASE chat OWNER postgres;

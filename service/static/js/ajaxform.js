@@ -14,3 +14,5 @@ let mark = new User("Mark");
 let david = new User("David");
 
 mark.hello(david);
+
+module.exports = User;

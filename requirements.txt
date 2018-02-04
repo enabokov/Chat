@@ -10,7 +10,7 @@ isort==4.2.15
 Jinja2==2.10
 multidict==4.1.0
 pathlib==1.0.1
+psycopg2==2.7.3.2
 pyflakes==1.6.0
-SQLAlchemy==1.2.2
 trafaret==1.0.2
 yarl==1.1.0
