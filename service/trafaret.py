@@ -1,6 +1,6 @@
 import trafaret as t
 
-from .utils.trafaret import are_equal
+from misc.trafaret import are_equal
 
 LoginTrafaret = t.Dict({
     t.Key('name'): t.String(max_length=20),

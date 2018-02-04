@@ -1,14 +1,16 @@
 import asyncpg
 
-from configs.postgres import DATABASE, HOST, PASSWORD, PORT, USER
+from configs import postgres as pg
+from misc.core import retry
 
 
+@retry(times='forever')
 async def setup_postgres(
-    host=HOST,
-    port=PORT,
-    user=USER,
-    password=PASSWORD,
-    database=DATABASE,
+    host=pg.HOST,
+    port=pg.PORT,
+    user=pg.USER,
+    password=pg.PASSWORD,
+    database=pg.DATABASE,
     *,
     loop,
 ):
