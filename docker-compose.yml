@@ -6,6 +6,6 @@ services:
       POSTGRES_PASSWORD: 'mysecretpassword'
       POSTGRES_USER: postgres
     volumes:
-      - ./service/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./misc/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
