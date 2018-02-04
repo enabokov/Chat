@@ -19,7 +19,7 @@
                         <label class="control-label" for="name">Name:</label>
                         <div>
                             <input name="name" type="text"
-                                   class="form-control" id="name" placeholder="Name">
+                                   class="form-control" id="name" placeholder="Name" {% if data is not none %} value="{{ data['name'] }}" {% endif %}>
                         </div>
                     </div>
 
