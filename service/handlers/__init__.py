@@ -8,14 +8,16 @@ class Router:
     auth = None
     chat = None
 
-    def __init__(self):
+    def __init__(self, app, loop):
+        self.app = app
+        self.loop = loop
         self.handlers = set()
         self.routers = set()
 
     def setup_index_handlers(self):
         from .auth import Handler
 
-        handler = Handler()
+        handler = Handler(self.app, self.loop)
 
         self.handlers.add(handler)
 

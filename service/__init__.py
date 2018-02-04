@@ -6,6 +6,7 @@ from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
 
 from misc.jinja2 import setup_jinja2
+from misc.setup import setup_postgres
 from service.handlers import Router
 
 from .middlewares import TemplateMiddleware
@@ -17,7 +18,7 @@ class Server(
     TemplateMiddleware,
 ):
     host = '0.0.0.0'
-    port = 9999
+    port = 9000
 
     router = None
     http_server = None
@@ -25,6 +26,7 @@ class Server(
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     handler = None
+    reloader = None
 
     def __init__(self):
         self.app = web.Application(loop=self.loop)
@@ -35,7 +37,6 @@ class Server(
         jinja2_env = Environment(
             loader=FileSystemLoader([TEMPLATES_ROOT, APP_ROOT]))
         self.app[JINJA2_ENVIRONMENT] = jinja2_env
-
         jinja2_env = setup_jinja2(jinja2_env, self.app)
         jinja2_env.globals['app'] = self.app
 
@@ -44,10 +45,13 @@ class Server(
             path=STATIC_ROOT,
             name='static')
 
-        self.router = Router()
+        self.app['pool'] = self.loop.run_until_complete(setup_postgres(
+            loop=self.loop,
+        ))
+
+        self.router = Router(self.app, self.loop)
         self.router.setup_index_handlers()
         self.router.setup_chat_handlers()
-
         setup_routes(self.app, self.router)
 
         self.app.middlewares.append(self.middleware)
