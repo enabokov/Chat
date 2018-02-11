@@ -1,17 +1,25 @@
-import asyncio
 import logging
 
 import aioreloader
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
 
+import base64
+from cryptography import fernet
+from aiohttp_session import setup as setup_session
+from aiohttp_session.cookie_storage import EncryptedCookieStorage
+
 from misc.jinja2 import setup_jinja2
-from misc.setup import setup_postgres
+from misc.setup import setup_postgres, Loop
 from service.handlers import Router
 
 from .middlewares import TemplateMiddleware
 from .routes import setup_routes
 from .settings import APP_ROOT, JINJA2_ENVIRONMENT, STATIC_ROOT, TEMPLATES_ROOT
+
+from aiohttp_security import setup as setup_security
+from aiohttp_security import SessionIdentityPolicy
+from misc.auth import DictAuthorization, user_map
 
 
 class Server(
@@ -22,7 +30,7 @@ class Server(
 
     router = None
     http_server = None
-    loop = asyncio.get_event_loop()
+    loop = Loop().get_loop()
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     handler = None
@@ -30,7 +38,10 @@ class Server(
 
     def __init__(self):
         self.app = web.Application(loop=self.loop)
+        self.app.user_map = user_map
+        self.app['loop'] = self.loop
         self.reloader = aioreloader.start(loop=self.loop)
+
         logging.info('App initialized')
 
     def setup(self):
@@ -45,23 +56,37 @@ class Server(
             path=STATIC_ROOT,
             name='static')
 
-        self.app['pool'] = self.loop.run_until_complete(setup_postgres(
-            loop=self.loop,
-        ))
+        self.app['pool'] = self.loop.run_until_complete(
+            setup_postgres(loop=self.loop),
+        )
 
-        self.router = Router(self.app, self.loop)
+        self.router = Router(self.app)
         self.router.setup_index_handlers()
         self.router.setup_chat_handlers()
+        self.router.setup_message_handlers()
         setup_routes(self.app, self.router)
 
         self.app.middlewares.append(self.middleware)
+
+        # secret_key must be 32 url-safe base64-encoded bytes
+        fernet_key = fernet.Fernet.generate_key()
+        secret_key = base64.urlsafe_b64decode(fernet_key)
+
+        setup_session(
+            self.app,
+            EncryptedCookieStorage(
+                secret_key,
+                cookie_name='API_SESSION'),
+        )
+
+        policy = SessionIdentityPolicy()
+        setup_security(self.app, policy, DictAuthorization(user_map))
 
         self.handler = self.app.make_handler(loop=self.loop)
 
         aioreloader.watch('service/handlers/')
 
     def run(self):
-
         self.setup()
         http_server = self.loop.create_server(
             self.handler,
