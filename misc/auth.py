@@ -1,4 +1,5 @@
 from functools import namedtuple
+
 from aiohttp_security.abc import AbstractAuthorizationPolicy
 
 

@@ -1,6 +1,6 @@
-from misc.handlers import TemplateHandler
-
 from aiohttp_security import authorized_userid
+
+from misc.handlers import TemplateHandler
 
 from . import BaseHandler
 from ..storages.users import Storage

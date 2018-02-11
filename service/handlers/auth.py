@@ -1,15 +1,13 @@
 import trafaret as t
 from aiohttp import web
-
-from misc.handlers import TemplateHandler
-from service.trafaret import SignUpTrafaret, LoginTrafaret
-from . import BaseHandler
-from ..storages.users import Storage
-from aiohttp_security import (
-    remember, forget,
-)
+from aiohttp_security import forget, remember
 
 from misc.auth import add_user
+from misc.handlers import TemplateHandler
+from service.trafaret import LoginTrafaret, SignUpTrafaret
+
+from . import BaseHandler
+from ..storages.users import Storage
 
 
 class Handler(
@@ -114,7 +112,8 @@ class Handler(
                 context={
                     'signup': False,
                     'data': get,
-                    'errors': 'Login or password is incorrect. Or user doesn\'t exist',
+                    'errors': 'Login or password is incorrect. '
+                              'Or user doesn\'t exist',
                 }
 
             )

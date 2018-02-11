@@ -1,8 +1,10 @@
-import asyncpg
 import asyncio
+
+import asyncpg
 
 from configs import postgres as pg
 from misc.core import retry
+
 from .singleton import Singleton
 
 

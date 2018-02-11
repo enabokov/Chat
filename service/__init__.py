@@ -1,25 +1,23 @@
+import base64
 import logging
 
 import aioreloader
 from aiohttp import web
-from jinja2 import Environment, FileSystemLoader
-
-import base64
-from cryptography import fernet
+from aiohttp_security import setup as setup_security
+from aiohttp_security import SessionIdentityPolicy
 from aiohttp_session import setup as setup_session
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
+from cryptography import fernet
+from jinja2 import Environment, FileSystemLoader
 
+from misc.auth import DictAuthorization, user_map
 from misc.jinja2 import setup_jinja2
-from misc.setup import setup_postgres, Loop
+from misc.setup import Loop, setup_postgres
 from service.handlers import Router
 
 from .middlewares import TemplateMiddleware
 from .routes import setup_routes
 from .settings import APP_ROOT, JINJA2_ENVIRONMENT, STATIC_ROOT, TEMPLATES_ROOT
-
-from aiohttp_security import setup as setup_security
-from aiohttp_security import SessionIdentityPolicy
-from misc.auth import DictAuthorization, user_map
 
 
 class Server(

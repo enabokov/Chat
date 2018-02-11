@@ -1,7 +1,8 @@
 import asyncpg
 from aiohttp import web
-from misc.setup import Loop
+
 from misc.postgres import PostgresMixin
+from misc.setup import Loop
 
 
 class Storage(
@@ -36,13 +37,15 @@ class Storage(
             return
 
         if len(user) > 1:
-            raise web.HTTPBadRequest(reason='Duplicated names found in postgres!')
+            raise web.HTTPBadRequest(
+                reason='Duplicated names found in postgres!')
 
         return user[0]
 
     async def get_by_name_with_password(self, data):
         sql = '''SELECT name FROM users WHERE name = $1 AND password = $2'''
-        user = await self.read(self.pool, sql, data['name'], data['password'])
+        user = await self.read(
+            self.pool, sql, data['name'], data['password'])
 
         user = list(map(dict, user))
 
@@ -50,7 +53,8 @@ class Storage(
             return
 
         if len(user) > 1:
-            raise web.HTTPBadRequest(reason='Duplicated names found in postgres!')
+            raise web.HTTPBadRequest(
+                reason='Duplicated names found in postgres!')
 
         return user[0]
 
@@ -62,7 +66,8 @@ class Storage(
     async def insert(self, data):
         sql = '''INSERT INTO users (name, password) VALUES ($1, $2)'''
         try:
-            return await self.write(self.pool, sql, data['name'], data['password'])
+            return await self.write(
+                self.pool, sql, data['name'], data['password'])
         except asyncpg.exceptions.UniqueViolationError:
-            raise web.HTTPBadRequest(reason='User already exists. '
-                                            'Try another name')
+            raise web.HTTPBadRequest(
+                reason='User already exists. Try another name')

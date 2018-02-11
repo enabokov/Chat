@@ -1,14 +1,14 @@
-from misc.handlers import TemplateHandler
-
-from aiohttp_security import authorized_userid
-
-from aiohttp import web
-from . import BaseHandler
-from ..storages.users import Storage
-
-from datetime import datetime as dt
 import json
 import os
+from datetime import datetime as dt
+
+from aiohttp import web
+from aiohttp_security import authorized_userid
+
+from misc.handlers import TemplateHandler
+
+from . import BaseHandler
+from ..storages.users import Storage
 
 
 class Handler(
