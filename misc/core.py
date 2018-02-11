@@ -18,7 +18,7 @@ def retry(times):
                 try:
                     result = await method(*args, **kwargs)
 
-                    print(result)
+                    print(f'Connected! {result}')
                     if isinstance(result, Pool):
                         return result
                 except:  # noqa
