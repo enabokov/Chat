@@ -19,21 +19,23 @@ class Loop(metaclass=Singleton):
         return self.__loop_instance
 
 
-@retry(times='forever')
+@retry(times=3)
 async def setup_postgres(
     host=pg.HOST,
     port=pg.PORT,
     user=pg.USER,
     password=pg.PASSWORD,
     database=pg.DATABASE,
+    dsn=pg.DSN,
     *,
     loop,
 ):
     return await asyncpg.create_pool(
-        host=host,
-        port=port,
-        user=user,
-        password=password,
-        database=database,
+        dsn=dsn,
+        # host=host,
+        # port=port,
+        # user=user,
+        # password=password,
+        # database=database,
         loop=loop,
     )

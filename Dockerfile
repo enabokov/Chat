@@ -1,11 +1,24 @@
-FROM python:3.6
+FROM ubuntu:16.04
 
-WORKDIR /app
+RUN apt-get -y update \
+    && apt-get -y install software-properties-common python3-software-properties \
+    && add-apt-repository ppa:jonathonf/python-3.6 \
+    && apt-get -y update
+
+RUN apt-get -y install curl
+
+RUN apt-get -y install python3.6 python3.6-dev python3.6-venv
+
+RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
+
+RUN apt-get -y update
 
 ADD . /app
+WORKDIR /app
 
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip3.6 install -r requirements.txt
 
-EXPOSE 80
+RUN python3.6 -V
+RUN pip3.6 -V
 
-CMD ["python", "runner.py"]
+CMD ["python3.6", "runner.py"]

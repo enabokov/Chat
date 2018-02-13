@@ -38,7 +38,6 @@ class Server(
         self.app = web.Application(loop=self.loop)
         self.app.user_map = user_map
         self.app['loop'] = self.loop
-        self.reloader = aioreloader.start(loop=self.loop)
 
         logging.info('App initialized')
 
@@ -85,7 +84,7 @@ class Server(
         aioreloader.watch('service/handlers/')
 
     def run(self):
-        self.setup()
+        self.reloader = aioreloader.start(loop=self.loop)
         http_server = self.loop.create_server(
             self.handler,
             self.host,

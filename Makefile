@@ -3,7 +3,7 @@ run-chat-server:
 
 run-database:
 	docker-compose rm -f -s
-	docker-compose up --force-recreate
+	docker-compose up --build --force-recreate
 
 lint:
 	flake8
