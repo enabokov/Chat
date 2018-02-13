@@ -11,6 +11,7 @@ class TemplateHandler:
                       template_path,
                       request,
                       context,
+                      *,
                       jinja2_key=JINJA2_ENVIRONMENT):
         env = request.app.get(jinja2_key)
         template = env.get_template(template_path)

@@ -1,11 +1,19 @@
 version: '3'
 services:
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: 'mysecretpassword'
-      POSTGRES_USER: postgres
-    volumes:
-      - ./misc/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
+    web:
+      build: .
+      ports:
+        - "80:9000"
+      depends_on:
+        - postgres
+      restart: 'on-failure:5'
+    postgres:
+      image: postgres
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_PASSWORD: 'mysecretpassword'
+        POSTGRES_USER: postgres
+      volumes:
+         - ./data/postgres:/var/lib/postgresql/data
+         - ./misc/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
