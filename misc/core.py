@@ -17,7 +17,6 @@ def retry(times):
                 await asyncio.sleep(1)
                 try:
                     result = await method(*args, **kwargs)
-
                     print(f'Connected! {result}')
                     if isinstance(result, Pool):
                         return result
