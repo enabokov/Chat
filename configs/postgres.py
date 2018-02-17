@@ -4,4 +4,4 @@ USER = 'edward'
 PASSWORD = 'edward'
 DATABASE = 'chat'
 
-DSN = f'postgresql://{USER}:{PASSWORD}@postgres:{PORT}/{DATABASE}'
+DSN = f'postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}'
