@@ -7,7 +7,7 @@ function getCachedMessages() {
     async: true,
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
-      sendMessage(_data.name, _data.time, _data.message)
+      sendMessage(data)
     },
     error: function (data) {}
   });
@@ -28,7 +28,7 @@ function log(message) {
   chat_box.scrollTop(chat_box.scrollTop() + 1000);
 }
 
-function sendMessage(json_message, left=false) {
+function sendMessage(json_message) {
   let msg = null;
   try {
     msg = JSON.parse(json_message.toString());
@@ -36,14 +36,13 @@ function sendMessage(json_message, left=false) {
     return false;
   }
   let chat_box = $('#chat_box');
-  if (!left)
-    if ([].constructor === msg)
-      for(let i = 0; i < msg.length; i++)
+  if (msg || msg.length > 0)
+    if (Array.isArray(msg))
+      for(let i = 0; i < msg.length; i++) {
         chat_box.append('<p>(' + msg[i].time + ') ' + msg[i].name + ': ->  ' + msg[i].message + '</p>');
+      }
     else
       chat_box.append('<p>(' + msg.time + ') ' + msg.name + ': ->  ' + msg.message + '</p>');
-  else
-    chat_box.append('<p>' + msg.name + ' ' + msg.message + '</p>');
   chat_box.scrollTop(chat_box.scrollTop() + 1000);
 }
 
@@ -57,13 +56,14 @@ $(function() {
     log('Connecting...');
     connection.onopen = function () {
       log('Connection established');
-      getCachedMessages()
+      getCachedMessages();
     };
     connection.onclose = function (event) {
       log('Disconnected...');
       connection = null;
     };
     connection.onmessage = function (event) {
+      console.log('Send message');
       sendMessage(event.data)
     };
   }
@@ -93,13 +93,16 @@ $(function() {
             return false;
         }
       });
-  if (window.location.host + '/chat')
+
+  if (window.location.href === window.location.protocol + '//' + window.location.host + '/chat') {
+    disconnect();
     if (connection == null)
       connect();
-    $('#logged_out').click(function() {
+    return false;
+  }
+  $('#logged_out').click(function () {
     if (connection != null)
       disconnect();
-      return false;
-    });
     return false;
+  });
 });

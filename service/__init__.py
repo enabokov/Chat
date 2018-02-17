@@ -64,7 +64,6 @@ class Server(
         self.router = Router(self.app)
         self.router.setup_index_handlers()
         self.router.setup_chat_handlers()
-        self.router.setup_message_handlers()
         setup_routes(self.app, self.router)
 
         self.app.middlewares.append(self.middleware)

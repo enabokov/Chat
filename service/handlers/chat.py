@@ -23,8 +23,7 @@ class Handler(
 
     def __init__(self, app):
         self.storage = Storage(app)
-        self.loop = app['loop']
-        self.loop.run_until_complete(self.__pre_setup_json_file())
+        app['loop'].run_until_complete(self.__pre_setup_json_file())
 
     async def websocket_chat(self, request):
         username = await authorized_userid(request)
@@ -39,10 +38,6 @@ class Handler(
 
         resp = WebSocketResponse()
         available = resp.can_prepare(request)
-        print('=' * 30)
-        print(f'Socket: {available}')
-        print(f'User: {username}')
-        print('=' * 30)
         if not available:
             return self.render_template(
                 template_name='page/chat.html',
@@ -63,15 +58,15 @@ class Handler(
 
             async for msg in resp:
                 if msg.type == WSMsgType.TEXT:
+                    data = {
+                        'time': str(dt.now().time()),
+                        'name': username,
+                        'message': msg.data,
+                    }
+                    await self.save(data)
                     for ws in request.app['sockets']:
-                        resp = {
-                            'time': str(dt.now().time()),
-                            'name': username,
-                            'message': msg.data,
-                        }
-                        await self.save(resp)
-                        if ws is not resp:
-                            await ws.send_json(resp)
+                        # if ws is not resp:
+                        await ws.send_json(data)
                 else:
                     return resp
             return resp
