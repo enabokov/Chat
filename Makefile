@@ -1,7 +1,4 @@
-run-chat-server:
-	python runner.py
-
-run-database:
+run-all:
 	docker-compose rm -f -s
 	docker-compose up --build --force-recreate
 
