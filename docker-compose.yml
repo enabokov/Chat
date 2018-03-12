@@ -3,17 +3,12 @@ services:
     web:
       build: .
       ports:
-        - "80:9000"
-      depends_on:
-        - postgres
-      restart: 'on-failure:5'
+        - 9000:9000
+      restart: always
     postgres:
-      image: postgres
       ports:
-        - "5432:5432"
-      environment:
-        POSTGRES_PASSWORD: 'mysecretpassword'
-        POSTGRES_USER: postgres
+        - 5432:5432
+      image: postgres:9.6
       volumes:
          - ./data/postgres:/var/lib/postgresql/data
          - ./misc/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
