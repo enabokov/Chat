@@ -5,6 +5,8 @@ services:
       ports:
         - 8855:9000
       restart: always
+      depends_on: 
+        - "postgres"
     postgres:
       ports:
         - 5432:5432
