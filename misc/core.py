@@ -22,6 +22,6 @@ def retry(times):
                         return result
                 except:  # noqa
                     pass
-            return None
+            raise OSError
         return _call
     return _retry

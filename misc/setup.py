@@ -19,7 +19,7 @@ class Loop(metaclass=Singleton):
         return self.__loop_instance
 
 
-@retry(times='forever')
+@retry(times=5)
 async def setup_postgres(
     dsn=pg.DSN,
     *,
