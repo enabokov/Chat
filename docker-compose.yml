@@ -3,7 +3,7 @@ services:
     web:
       build: .
       ports:
-        - 80:9000
+        - 8855:9000
       restart: always
     postgres:
       ports:
