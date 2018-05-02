@@ -1,6 +1,6 @@
 run-all:
 	docker-compose rm -f -s
-	docker-compose up --build --force-recreate -d
+	docker-compose up --build --force-recreate
 
 lint:
 	flake8
