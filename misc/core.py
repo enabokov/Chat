@@ -21,7 +21,7 @@ def retry(times):
                     if isinstance(result, Pool):
                         return result
                 except:  # noqa
-                    pass
+                    await asyncio.sleep(5)
             raise OSError
         return _call
     return _retry
