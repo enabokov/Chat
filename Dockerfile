@@ -4,7 +4,7 @@ RUN apt-get -y update \
     && apt-get -y install software-properties-common python3-software-properties \
     && add-apt-repository ppa:jonathonf/python-3.6 \
     && apt-get -y install nodejs \
-    && apt-get -y update 
+    && apt install python3-distutils
 
 RUN apt-get -y install curl
 
