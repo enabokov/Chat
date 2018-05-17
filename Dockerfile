@@ -11,12 +11,13 @@ RUN apt-get -y install curl \
     && apt-get -y update
 
 ADD package.json /tmp/package.json
-RUN cd /tmp && npm install
-RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
+RUN cd /tmp 
+RUN mkdir -p /opt/app
 
 RUN apt-get -y install python3.6 python3.6-dev python3.6-venv
 
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
+RUN pip install --upgrade pip==9.0.3
 
 RUN apt-get -y update
 
