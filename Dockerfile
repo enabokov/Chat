@@ -12,6 +12,8 @@ RUN apt-get -y install curl \
     && apt-get -y install nodejs \
     && apt-get -y update
 
+RUN npm install
+
 ADD package.json /tmp/package.json
 RUN cd /tmp 
 RUN mkdir -p /opt/app
