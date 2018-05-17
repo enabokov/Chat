@@ -4,8 +4,8 @@ pipeline {
         stage('tests') {
             steps {
                 sh 'python --version'
-		sh 'npm -V'
-		sh 'node -V'
+		sh 'npm --version'
+		sh 'node --version'
             }
         }
     }
